@@ -1,0 +1,79 @@
+{% extends 'shared/base.html' %}
+{% block title %}Grade Assignment — EduClass{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>🎯 Grade: {{ assignment.title }}</h1>
+  <a href="{{ url_for('classwork', class_id=assignment.class_id) }}"
+     class="btn btn-ghost">
+    <i class="fas fa-arrow-left"></i> Back
+  </a>
+</div>
+
+{% if submissions %}
+  <form method="POST"
+        action="{{ url_for('grade_assignment', assignment_id=assignment.id) }}">
+    {% for sub in submissions %}
+      <div class="card" style="margin-bottom:14px;">
+        <div class="card-body">
+          <div style="display:flex;align-items:center;
+                      justify-content:space-between;flex-wrap:wrap;gap:10px;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div class="person-av">{{ sub.student.full_name[0].upper() }}</div>
+              <div>
+                <div class="person-name">{{ sub.student.full_name }}</div>
+                <div class="person-email">
+                  Submitted {{ sub.submitted_at.strftime('%b %d, %Y · %I:%M %p') }}
+                </div>
+              </div>
+            </div>
+            <span class="badge {{ 'badge-success' if sub.status == 'graded' else 'badge-purple' }}">
+              {{ sub.status.capitalize() }}
+            </span>
+          </div>
+
+          {% if sub.comment %}
+            <div style="margin-top:12px;padding:10px 14px;
+                        background:var(--g50);border-radius:8px;
+                        font-size:0.875rem;color:var(--g600);">
+              <i class="fas fa-comment"></i> {{ sub.comment }}
+            </div>
+          {% endif %}
+
+          <div style="display:grid;grid-template-columns:1fr 2fr;
+                      gap:12px;margin-top:16px;">
+            <div class="form-group" style="margin:0;">
+              <label class="form-label">
+                Marks / {{ assignment.total_marks }}
+              </label>
+              <input type="number" name="marks_{{ sub.id }}"
+                     class="form-control"
+                     value="{{ sub.marks_obtained if sub.marks_obtained is not none else '' }}"
+                     min="0" max="{{ assignment.total_marks }}">
+            </div>
+            <div class="form-group" style="margin:0;">
+              <label class="form-label">Feedback</label>
+              <input type="text" name="feedback_{{ sub.id }}"
+                     class="form-control"
+                     value="{{ sub.feedback or '' }}"
+                     placeholder="Write feedback for this student...">
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+
+    <button type="submit" class="btn btn-primary btn-lg">
+      <i class="fas fa-save"></i> Save All Grades
+    </button>
+  </form>
+
+{% else %}
+  <div class="empty-state">
+    <div class="icon">📭</div>
+    <h3>No submissions yet</h3>
+    <p>Students haven't submitted this assignment yet.</p>
+  </div>
+{% endif %}
+
+{% endblock %}

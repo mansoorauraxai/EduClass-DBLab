@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}EduClass{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="{{ url_for('dashboard') }}" class="nav-brand">
+    <div class="nav-logo">🎓</div>
+    EduClass
+  </a>
+  <div class="nav-actions">
+    {% if current_user.is_teacher() %}
+      <button class="btn btn-primary btn-sm"
+              onclick="openModal('createClassModal')">
+        <i class="fas fa-plus"></i> New Class
+      </button>
+    {% else %}
+      <button class="btn btn-outline btn-sm"
+              onclick="openModal('joinClassModal')">
+        <i class="fas fa-plus"></i> Join Class
+      </button>
+    {% endif %}
+    <div class="avatar">{{ current_user.full_name[0].upper() }}</div>
+    <a href="{{ url_for('logout') }}"
+       class="btn btn-ghost btn-sm"
+       title="Logout">
+      <i class="fas fa-right-from-bracket"></i>
+    </a>
+  </div>
+</nav>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <a href="{{ url_for('dashboard') }}" class="sidebar-link">
+      <i class="fas fa-house"></i> Home
+    </a>
+
+    <div class="sidebar-label">My Classes</div>
+
+    {% if current_user.is_teacher() %}
+      {% for c in current_user.classes_taught %}
+        <a href="{{ url_for('class_stream', class_id=c.id) }}"
+           class="sidebar-link">
+          <i class="fas fa-chalkboard"></i>
+          {{ c.class_name[:22] }}
+        </a>
+      {% endfor %}
+    {% else %}
+      {% for enr in current_user.enrollments %}
+        {% if enr.enrolled_class %}
+          <a href="{{ url_for('class_stream', class_id=enr.enrolled_class.id) }}"
+             class="sidebar-link">
+            <i class="fas fa-book-open"></i>
+            {{ enr.enrolled_class.class_name[:22] }}
+          </a>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+
+    <div style="margin-top:auto;padding-top:20px;">
+      <a href="{{ url_for('logout') }}" class="sidebar-link">
+        <i class="fas fa-right-from-bracket"></i> Logout
+      </a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, msg in messages %}
+        <div class="alert alert-{{ category }}">
+          <i class="fas fa-circle-info"></i> {{ msg }}
+        </div>
+      {% endfor %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+
+  </main>
+</div>
+
+<!-- ── TEACHER: Create Class Modal ── -->
+{% if current_user.is_teacher() %}
+<div class="modal-overlay" id="createClassModal">
+  <div class="modal">
+    <h3><i class="fas fa-chalkboard" style="color:var(--p600)"></i> Create New Class</h3>
+    <form method="POST" action="{{ url_for('create_class') }}">
+      <div class="form-group">
+        <label class="form-label">Class Name *</label>
+        <input type="text" name="class_name" class="form-control"
+               placeholder="e.g. Database Systems" required>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="form-group">
+          <label class="form-label">Section</label>
+          <input type="text" name="section" class="form-control" placeholder="e.g. A">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Room</label>
+          <input type="text" name="room" class="form-control" placeholder="e.g. Lab 1">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Subject</label>
+        <input type="text" name="subject" class="form-control"
+               placeholder="e.g. Computer Science">
+      </div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:4px;">
+        <button type="button" class="btn btn-ghost modal-close">Cancel</button>
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-plus"></i> Create
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endif %}
+
+<!-- ── STUDENT: Join Class Modal ── -->
+{% if current_user.is_student() %}
+<div class="modal-overlay" id="joinClassModal">
+  <div class="modal">
+    <h3><i class="fas fa-door-open" style="color:var(--p600)"></i> Join a Class</h3>
+    <p style="color:var(--g400);font-size:0.875rem;margin-bottom:18px;">
+      Enter the class code given by your teacher.
+    </p>
+    <form method="POST" action="{{ url_for('join_class') }}">
+      <div class="form-group">
+        <label class="form-label">Class Code</label>
+        <input type="text" name="class_code" class="form-control"
+               placeholder="e.g. AB12345"
+               style="text-transform:uppercase;letter-spacing:0.1em;font-size:1rem;"
+               required>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:4px;">
+        <button type="button" class="btn btn-ghost modal-close">Cancel</button>
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-right-to-bracket"></i> Join
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endif %}
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

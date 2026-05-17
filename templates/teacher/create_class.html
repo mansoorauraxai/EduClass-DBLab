@@ -1,0 +1,49 @@
+{% extends 'shared/base.html' %}
+{% block title %}Create Class — EduClass{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>🏫 Create New Class</h1>
+  <a href="{{ url_for('dashboard') }}" class="btn btn-ghost">
+    <i class="fas fa-arrow-left"></i> Back
+  </a>
+</div>
+
+<div class="card" style="max-width:600px;">
+  <div class="card-body" style="padding:28px;">
+    <form method="POST" action="{{ url_for('create_class') }}">
+      <div class="form-group">
+        <label class="form-label">Class Name *</label>
+        <input type="text" name="class_name" class="form-control"
+               placeholder="e.g. Database Systems" required>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div class="form-group">
+          <label class="form-label">Section</label>
+          <input type="text" name="section" class="form-control" placeholder="e.g. A">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Room</label>
+          <input type="text" name="room" class="form-control" placeholder="e.g. Lab 1">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Subject</label>
+        <input type="text" name="subject" class="form-control"
+               placeholder="e.g. Computer Science">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Theme Color</label>
+        <input type="color" name="theme_color" class="form-control"
+               value="#7c3aed" style="height:44px;cursor:pointer;">
+      </div>
+      <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:8px;">
+        <a href="{{ url_for('dashboard') }}" class="btn btn-ghost">Cancel</a>
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-plus"></i> Create Class
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

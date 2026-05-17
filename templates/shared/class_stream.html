@@ -1,0 +1,93 @@
+{% extends 'shared/base.html' %}
+{% block title %}{{ cls.class_name }} — Stream{% endblock %}
+
+{% block content %}
+
+<div class="class-banner">
+  <h1>{{ cls.class_name }}</h1>
+  <p>
+    {{ cls.section or '' }}
+    {% if cls.subject %} · {{ cls.subject }}{% endif %}
+    {% if cls.room %} · {{ cls.room }}{% endif %}
+  </p>
+  <div class="code-badge">Class Code: {{ cls.class_code }}</div>
+</div>
+
+<div class="tabs">
+  <a href="{{ url_for('class_stream', class_id=cls.id) }}"
+     class="tab-link active">
+    <i class="fas fa-stream"></i> Stream
+  </a>
+  <a href="{{ url_for('classwork', class_id=cls.id) }}"
+     class="tab-link">
+    <i class="fas fa-tasks"></i> Classwork
+  </a>
+  <a href="{{ url_for('class_people', class_id=cls.id) }}"
+     class="tab-link">
+    <i class="fas fa-users"></i> People
+  </a>
+</div>
+
+<div class="stream-wrap">
+
+  {% if current_user.is_teacher() and cls.teacher_id == current_user.id %}
+    <div class="post-trigger">
+      <div class="avatar">{{ current_user.full_name[0].upper() }}</div>
+      <span>Announce something to your class...</span>
+    </div>
+  {% endif %}
+
+  {% for ann in announcements %}
+    <div class="ann-card">
+      <div class="ann-meta">
+        <div class="avatar" style="width:34px;height:34px;font-size:0.8rem;">
+          {{ ann.author.full_name[0].upper() }}
+        </div>
+        <div>
+          <div class="ann-author">{{ ann.author.full_name }}</div>
+          <div class="ann-date">
+            {{ ann.created_at.strftime('%b %d, %Y · %I:%M %p') }}
+          </div>
+        </div>
+      </div>
+      <div class="ann-content">{{ ann.content }}</div>
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <div class="icon">📢</div>
+      <h3>No announcements yet</h3>
+      <p>
+        {% if current_user.is_teacher() %}
+          Post an announcement to your class above.
+        {% else %}
+          Your teacher hasn't posted anything yet.
+        {% endif %}
+      </p>
+    </div>
+  {% endfor %}
+
+</div>
+
+<!-- Announce Modal -->
+{% if current_user.is_teacher() %}
+<div class="modal-overlay" id="announceModal">
+  <div class="modal">
+    <h3>📢 Post Announcement</h3>
+    <form method="POST" action="{{ url_for('post_announcement', class_id=cls.id) }}">
+      <div class="form-group">
+        <textarea name="content" class="form-control" rows="5"
+                  placeholder="Share something with your class..."
+                  required></textarea>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:flex-end;">
+        <button type="button" class="btn btn-ghost modal-close">Cancel</button>
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-paper-plane"></i> Post
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}

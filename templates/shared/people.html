@@ -1,0 +1,53 @@
+{% extends 'shared/base.html' %}
+{% block title %}{{ cls.class_name }} — People{% endblock %}
+
+{% block content %}
+
+<div class="class-banner">
+  <h1>{{ cls.class_name }}</h1>
+  <p>{{ cls.section or '' }}{% if cls.subject %} · {{ cls.subject }}{% endif %}</p>
+</div>
+
+<div class="tabs">
+  <a href="{{ url_for('class_stream', class_id=cls.id) }}" class="tab-link">Stream</a>
+  <a href="{{ url_for('classwork', class_id=cls.id) }}" class="tab-link">Classwork</a>
+  <a href="{{ url_for('class_people', class_id=cls.id) }}" class="tab-link active">People</a>
+</div>
+
+<!-- Teacher -->
+<div class="card" style="margin-bottom:18px;">
+  <div class="card-body">
+    <p class="sidebar-label" style="padding:0;margin-bottom:12px;">Teacher</p>
+    <div class="person-row">
+      <div class="person-av">{{ cls.teacher.full_name[0].upper() }}</div>
+      <div>
+        <div class="person-name">{{ cls.teacher.full_name }}</div>
+        <div class="person-email">{{ cls.teacher.email }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Students -->
+<div class="card">
+  <div class="card-body">
+    <p class="sidebar-label" style="padding:0;margin-bottom:12px;">
+      Students ({{ students|length }})
+    </p>
+    {% for s in students %}
+      <div class="person-row">
+        <div class="person-av">{{ s.full_name[0].upper() }}</div>
+        <div>
+          <div class="person-name">{{ s.full_name }}</div>
+          <div class="person-email">{{ s.email }}</div>
+        </div>
+      </div>
+    {% else %}
+      <p style="color:var(--g400);text-align:center;padding:20px 0;">
+        No students enrolled yet.
+      </p>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'shared/base.html' %}
+{% block title %}Dashboard — EduClass{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>👋 Hello, {{ current_user.full_name.split()[0] }}!</h1>
+  <span class="badge badge-purple">
+    {{ 'Teacher' if current_user.is_teacher() else 'Student' }}
+  </span>
+</div>
+
+{% if classes %}
+  <div class="class-grid">
+    {% for c in classes %}
+      <a href="{{ url_for('class_stream', class_id=c.id) }}" class="class-card-link">
+        <div class="card">
+          <div class="class-header"
+               style="background: linear-gradient(135deg, {{ c.theme_color }}, #3b0764);">
+            <h3>{{ c.class_name }}</h3>
+            <p>
+              {{ c.section or '' }}
+              {% if c.subject %} · {{ c.subject }}{% endif %}
+            </p>
+            <div class="teacher-line">
+              {% if current_user.is_student() %}
+                👨‍🏫 {{ c.teacher.full_name }}
+              {% else %}
+                📍 {{ c.room or 'No room set' }}
+              {% endif %}
+            </div>
+          </div>
+          <div class="card-footer">
+            <span style="font-size:0.75rem;color:var(--g400);">
+              Code: <strong style="color:var(--p600);">{{ c.class_code }}</strong>
+            </span>
+            <span style="margin-left:auto;font-size:0.75rem;color:var(--g400);">
+              {{ c.enrollments|length }} student{{ 's' if c.enrollments|length != 1 else '' }}
+            </span>
+          </div>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+
+{% else %}
+  <div class="empty-state">
+    <div class="icon">📚</div>
+    <h3>No classes yet</h3>
+    {% if current_user.is_teacher() %}
+      <p>Create your first class to get started!</p>
+      <button class="btn btn-primary" onclick="openModal('createClassModal')">
+        <i class="fas fa-plus"></i> Create Class
+      </button>
+    {% else %}
+      <p>Join a class using the code from your teacher.</p>
+      <button class="btn btn-outline" onclick="openModal('joinClassModal')">
+        <i class="fas fa-plus"></i> Join Class
+      </button>
+    {% endif %}
+  </div>
+{% endif %}
+{% endblock %}
