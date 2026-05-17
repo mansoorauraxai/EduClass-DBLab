@@ -1,0 +1,21 @@
+id,class_name,section,subject,room,class_code,teacher_id,theme_color,created_at
+1,Mathematics Again,Section-A,Mathematics,Room-107,AW967,5,#2563eb,2025-11-16 11:05:09
+2,Physics In,Section-B,Physics,Room-136,ZM688,2,#ea580c,2026-03-24 01:19:36
+3,Chemistry Method,Section-A,Chemistry,Room-252,FB346,7,#7c3aed,2025-12-05 16:17:10
+4,Biology Relate,Section-A,Biology,Room-124,IN627,4,#2563eb,2026-01-05 14:40:44
+5,Computer Science What,Section-A,Computer Science,Room-244,QB699,4,#ea580c,2025-10-01 18:01:35
+6,English Later,Section-D,English,Room-157,DQ272,8,#ea580c,2025-12-03 14:26:27
+7,History Development,Section-C,History,Room-308,WY755,1,#2563eb,2025-11-12 03:03:18
+8,Economics Theory,Section-D,Economics,Room-188,EB641,5,#2563eb,2026-02-20 08:56:29
+9,Statistics Area,Section-B,Statistics,Room-296,XP531,6,#7c3aed,2025-09-22 10:44:58
+10,Data Structures Allow,Section-A,Data Structures,Room-198,NJ330,2,#16a34a,2025-11-03 16:06:22
+11,Mathematics Material,Section-C,Mathematics,Room-255,DS193,5,#7c3aed,2025-11-07 10:33:24
+12,Physics Home,Section-D,Physics,Room-238,VT299,2,#dc2626,2025-10-08 06:20:06
+13,Chemistry Tell,Section-A,Chemistry,Room-242,LB241,5,#ea580c,2026-03-30 16:08:29
+14,Biology Parent,Section-C,Biology,Room-248,EL663,4,#7c3aed,2026-02-07 22:26:04
+15,Computer Science Product,Section-A,Computer Science,Room-270,RM314,4,#16a34a,2026-03-04 09:42:25
+16,English Style,Section-A,English,Room-319,IB905,4,#7c3aed,2026-02-01 17:45:09
+17,History Authority,Section-D,History,Room-172,AF850,8,#16a34a,2025-10-06 08:22:14
+18,Economics High,Section-B,Economics,Room-195,LU726,6,#2563eb,2026-01-02 23:25:33
+19,Statistics Rather,Section-C,Statistics,Room-280,XE498,2,#ea580c,2025-12-21 20:46:24
+20,Data Structures That,Section-B,Data Structures,Room-237,PF945,4,#2563eb,2025-11-12 06:29:15
