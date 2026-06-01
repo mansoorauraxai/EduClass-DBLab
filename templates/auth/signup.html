@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up — EduClass</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+<div class="auth-page">
+
+  <!-- LEFT -->
+  <div class="auth-left">
+    <div style="font-size:3.5rem;margin-bottom:20px;z-index:1;">🎓</div>
+    <h1>Join EduClass</h1>
+    <p>Create your account and start your learning journey. Whether teacher or student, we've got you covered.</p>
+    <div style="margin-top:32px;z-index:1;display:flex;flex-direction:column;gap:11px;">
+      <div style="display:flex;align-items:center;gap:9px;font-size:0.875rem;opacity:0.9;">
+        <i class="fas fa-check-circle"></i> Create and manage classes
+      </div>
+      <div style="display:flex;align-items:center;gap:9px;font-size:0.875rem;opacity:0.9;">
+        <i class="fas fa-check-circle"></i> Post assignments and grade work
+      </div>
+      <div style="display:flex;align-items:center;gap:9px;font-size:0.875rem;opacity:0.9;">
+        <i class="fas fa-check-circle"></i> Share materials and announcements
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="auth-right">
+    <div class="auth-box">
+      <h2>Create Account</h2>
+      <p class="sub">Join EduClass — it's completely free!</p>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, msg in messages %}
+          <div class="alert alert-{{ category }}">
+            <i class="fas fa-circle-exclamation"></i> {{ msg }}
+          </div>
+        {% endfor %}
+      {% endwith %}
+
+      <form method="POST" action="{{ url_for('signup') }}">
+
+        <p style="font-size:0.82rem;font-weight:700;color:var(--g600);margin-bottom:9px;">I am a...</p>
+        <div class="role-row">
+          <label class="role-card selected">
+            <input type="radio" name="role" value="teacher" checked>
+            <div class="role-icon">👨‍🏫</div>
+            <div class="role-label">Teacher</div>
+            <div class="role-desc">Create classes</div>
+          </label>
+          <label class="role-card">
+            <input type="radio" name="role" value="student">
+            <div class="role-icon">🧑‍🎓</div>
+            <div class="role-label">Student</div>
+            <div class="role-desc">Join classes</div>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" name="full_name" class="form-control"
+                 placeholder="Your full name" required autofocus>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" name="email" class="form-control"
+                 placeholder="you@example.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" name="password" class="form-control"
+                 placeholder="Minimum 8 characters" required minlength="8">
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg"
+                style="width:100%;justify-content:center;margin-top:6px;">
+          <i class="fas fa-user-plus"></i> Create Account
+        </button>
+      </form>
+
+      <p style="text-align:center;margin-top:22px;font-size:0.875rem;color:var(--g400);">
+        Already have an account?
+        <a href="{{ url_for('login') }}"
+           style="color:var(--p600);font-weight:700;">Sign In</a>
+      </p>
+    </div>
+  </div>
+
+</div>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

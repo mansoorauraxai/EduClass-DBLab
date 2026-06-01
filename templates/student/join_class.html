@@ -1,0 +1,32 @@
+{% extends 'shared/base.html' %}
+{% block title %}Join Class — EduClass{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>🚪 Join a Class</h1>
+  <a href="{{ url_for('dashboard') }}" class="btn btn-ghost">
+    <i class="fas fa-arrow-left"></i> Back
+  </a>
+</div>
+
+<div class="card" style="max-width:440px;">
+  <div class="card-body" style="padding:28px;">
+    <p style="color:var(--g400);margin-bottom:20px;">
+      Enter the class code provided by your teacher.
+    </p>
+    <form method="POST" action="{{ url_for('join_class') }}">
+      <div class="form-group">
+        <label class="form-label">Class Code</label>
+        <input type="text" name="class_code" class="form-control"
+               placeholder="e.g. AB12345" required
+               style="text-transform:uppercase;letter-spacing:0.12em;
+                      font-size:1.05rem;font-weight:600;">
+      </div>
+      <button type="submit" class="btn btn-primary btn-lg"
+              style="width:100%;justify-content:center;">
+        <i class="fas fa-right-to-bracket"></i> Join Class
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}

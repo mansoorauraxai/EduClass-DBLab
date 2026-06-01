@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — EduClass</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+<div class="auth-page">
+
+  <!-- LEFT -->
+  <div class="auth-left">
+    <div style="font-size:3.5rem;margin-bottom:20px;z-index:1;">🎓</div>
+    <h1>EduClass</h1>
+    <p>Your all-in-one classroom management platform. Connect, collaborate, and learn together.</p>
+    <div style="margin-top:40px;display:flex;gap:28px;z-index:1;">
+      <div style="text-align:center;">
+        <div style="font-size:1.5rem;font-weight:800;">500+</div>
+        <div style="font-size:0.78rem;opacity:0.75;">Classes</div>
+      </div>
+      <div style="width:1px;background:rgba(255,255,255,0.2);"></div>
+      <div style="text-align:center;">
+        <div style="font-size:1.5rem;font-weight:800;">10K+</div>
+        <div style="font-size:0.78rem;opacity:0.75;">Students</div>
+      </div>
+      <div style="width:1px;background:rgba(255,255,255,0.2);"></div>
+      <div style="text-align:center;">
+        <div style="font-size:1.5rem;font-weight:800;">200+</div>
+        <div style="font-size:0.78rem;opacity:0.75;">Teachers</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="auth-right">
+    <div class="auth-box">
+      <h2>Welcome back</h2>
+      <p class="sub">Sign in to continue to EduClass</p>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, msg in messages %}
+          <div class="alert alert-{{ category }}">
+            <i class="fas fa-circle-exclamation"></i> {{ msg }}
+          </div>
+        {% endfor %}
+      {% endwith %}
+
+      <form method="POST" action="{{ url_for('login') }}">
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" name="email" class="form-control"
+                 placeholder="you@example.com" required autofocus>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" name="password" class="form-control"
+                 placeholder="Enter your password" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg"
+                style="width:100%;justify-content:center;margin-top:6px;">
+          <i class="fas fa-arrow-right-to-bracket"></i> Sign In
+        </button>
+      </form>
+
+      <p style="text-align:center;margin-top:22px;font-size:0.875rem;color:var(--g400);">
+        Don't have an account?
+        <a href="{{ url_for('signup') }}"
+           style="color:var(--p600);font-weight:700;">Sign Up</a>
+      </p>
+    </div>
+  </div>
+
+</div>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

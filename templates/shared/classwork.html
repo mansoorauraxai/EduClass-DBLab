@@ -1,0 +1,65 @@
+{% extends 'shared/base.html' %}
+{% block title %}{{ cls.class_name }} — Classwork{% endblock %}
+
+{% block content %}
+
+<div class="class-banner">
+  <h1>{{ cls.class_name }}</h1>
+  <p>{{ cls.section or '' }}{% if cls.subject %} · {{ cls.subject }}{% endif %}</p>
+</div>
+
+<div class="tabs">
+  <a href="{{ url_for('class_stream', class_id=cls.id) }}" class="tab-link">Stream</a>
+  <a href="{{ url_for('classwork', class_id=cls.id) }}" class="tab-link active">Classwork</a>
+  <a href="{{ url_for('class_people', class_id=cls.id) }}" class="tab-link">People</a>
+</div>
+
+<div class="page-header">
+  <h1 style="font-size:1.1rem;">Assignments</h1>
+  {% if current_user.is_teacher() and cls.teacher_id == current_user.id %}
+    <a href="{{ url_for('create_assignment', class_id=cls.id) }}"
+       class="btn btn-primary btn-sm">
+      <i class="fas fa-plus"></i> Create Assignment
+    </a>
+  {% endif %}
+</div>
+
+{% for a in assignments %}
+  <div class="assignment-item">
+    <div class="a-icon"><i class="fas fa-file-lines"></i></div>
+    <div class="a-info">
+      <h4>{{ a.title }}</h4>
+      <p>{{ a.teacher.full_name }} · Posted {{ a.created_at.strftime('%b %d') }}</p>
+    </div>
+    <div class="a-due">
+      {% if a.due_date %}
+        Due {{ a.due_date.strftime('%b %d, %Y') }}
+      {% else %}
+        No due date
+      {% endif %}
+    </div>
+    {% if current_user.is_student() %}
+      <a href="{{ url_for('view_assignment', assignment_id=a.id) }}"
+         class="btn btn-outline btn-sm">
+        View
+      </a>
+    {% else %}
+      <a href="{{ url_for('grade_assignment', assignment_id=a.id) }}"
+         class="btn btn-outline btn-sm">
+        Grade
+      </a>
+    {% endif %}
+  </div>
+{% else %}
+  <div class="empty-state">
+    <div class="icon">📝</div>
+    <h3>No assignments yet</h3>
+    {% if current_user.is_teacher() %}
+      <p>Create your first assignment for this class.</p>
+    {% else %}
+      <p>No assignments have been posted yet.</p>
+    {% endif %}
+  </div>
+{% endfor %}
+
+{% endblock %}

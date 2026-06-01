@@ -1,0 +1,97 @@
+{% extends 'shared/base.html' %}
+{% block title %}{{ assignment.title }} — EduClass{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>📤 Submit Assignment</h1>
+  <a href="{{ url_for('classwork', class_id=assignment.class_id) }}"
+     class="btn btn-ghost">
+    <i class="fas fa-arrow-left"></i> Back
+  </a>
+</div>
+
+<div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;
+            max-width:860px;align-items:start;">
+
+  <!-- DETAILS -->
+  <div class="card">
+    <div class="card-body" style="padding:26px;">
+      <h2 style="font-family:'Space Grotesk',sans-serif;
+                 font-size:1.3rem;margin-bottom:8px;">
+        {{ assignment.title }}
+      </h2>
+      <p style="color:var(--g400);font-size:0.83rem;margin-bottom:16px;">
+        {{ assignment.teacher.full_name }}
+        {% if assignment.due_date %}
+          · Due {{ assignment.due_date.strftime('%B %d, %Y at %I:%M %p') }}
+        {% else %}
+          · No due date
+        {% endif %}
+        · {{ assignment.total_marks }} marks
+      </p>
+      {% if assignment.description %}
+        <p style="line-height:1.7;color:var(--g700);white-space:pre-wrap;">
+          {{ assignment.description }}
+        </p>
+      {% else %}
+        <p style="color:var(--g400);font-style:italic;">
+          No instructions provided.
+        </p>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- SUBMIT / STATUS -->
+  <div class="card">
+    <div class="card-body" style="padding:20px;">
+      {% if submission %}
+        <div style="text-align:center;padding:10px 0;">
+          <div style="font-size:2.5rem;margin-bottom:10px;">✅</div>
+          <h4 style="font-weight:700;margin-bottom:6px;">Submitted</h4>
+          <p style="font-size:0.8rem;color:var(--g400);">
+            {{ submission.submitted_at.strftime('%b %d, %Y') }}
+          </p>
+          {% if submission.status == 'graded' %}
+            <div style="margin-top:14px;padding:14px;
+                        background:var(--p50);border-radius:10px;">
+              <div style="font-size:1.4rem;font-weight:800;color:var(--p700);">
+                {{ submission.marks_obtained }} / {{ assignment.total_marks }}
+              </div>
+              <div style="font-size:0.78rem;color:var(--g400);margin-top:2px;">
+                Your Grade
+              </div>
+              {% if submission.feedback %}
+                <p style="margin-top:10px;font-size:0.83rem;
+                           color:var(--g600);border-top:1px solid var(--p100);
+                           padding-top:10px;">
+                  {{ submission.feedback }}
+                </p>
+              {% endif %}
+            </div>
+          {% else %}
+            <span class="badge badge-purple" style="margin-top:10px;">
+              Awaiting Grade
+            </span>
+          {% endif %}
+        </div>
+
+      {% else %}
+        <h4 style="font-weight:700;margin-bottom:14px;">Your Work</h4>
+        <form method="POST"
+              action="{{ url_for('submit_assignment', assignment_id=assignment.id) }}">
+          <div class="form-group">
+            <label class="form-label">Comment (optional)</label>
+            <textarea name="comment" class="form-control" rows="4"
+                      placeholder="Add a note for your teacher..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary"
+                  style="width:100%;justify-content:center;">
+            <i class="fas fa-paper-plane"></i> Submit Assignment
+          </button>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+
+</div>
+{% endblock %}
